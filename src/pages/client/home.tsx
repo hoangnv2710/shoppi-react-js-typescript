@@ -1,7 +1,12 @@
+import { useAuthContext } from "@/components/context/auth.context";
+
 const HomePage = () => {
+    const { userData } = useAuthContext();
     return (
         <>
-            <h2>hp</h2>
+            <div>
+                {JSON.stringify(userData)}
+            </div>
         </>
     )
 }

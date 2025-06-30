@@ -22,4 +22,10 @@ const registerAPI = async (fullName: string, email: string, password: string, ph
     return response.data;
 }
 
-export { loginAPI, registerAPI }
+const fetchAccountAPI = async () => {
+    const url = "/api/v1/auth/account";
+    const response = await axios.get<IResponse<{ user: IUser }>>(url);
+    return response.data;
+}
+
+export { loginAPI, registerAPI, fetchAccountAPI }
