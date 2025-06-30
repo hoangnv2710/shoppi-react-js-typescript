@@ -1,4 +1,4 @@
-import { ILogin } from '@/types/api';
+import { ILogin, IRegister } from '@/types/api';
 import axios from 'services/axios.customize'
 
 interface IResponse<T> {
@@ -14,4 +14,12 @@ const loginAPI = async (username: string, password: string) => {
     return response;
 }
 
-export { loginAPI }
+
+const registerAPI = async (fullName: string, email: string, password: string, phone: string) => {
+    // console.log(fullName, email, password, phone);
+    const url = "/api/v1/user/register";
+    const response = await axios.post<IResponse<IRegister>>(url, { fullName, email, password, phone });
+    return response;
+}
+
+export { loginAPI, registerAPI }

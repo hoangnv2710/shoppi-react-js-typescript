@@ -10,4 +10,10 @@ interface ILogin {
     }
 }
 
-export { ILogin }
+interface IRegister {
+    _id: string,
+    email: string,
+    fullName: string
+}
+
+export { ILogin, IRegister }

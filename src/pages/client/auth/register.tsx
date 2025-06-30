@@ -1,9 +1,10 @@
 import React from 'react';
 import type { FormProps } from 'antd';
-import { Button, Form, Input } from 'antd';
-import { Link } from 'react-router-dom';
+import { Button, Form, Input, App } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 import './register.scss'
-import { loginAPI } from '@/services/api';
+import { registerAPI } from '@/services/api';
+
 
 type FieldType = {
     email: string;
@@ -12,16 +13,21 @@ type FieldType = {
     phone: string;
 };
 
-const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-    const res = await loginAPI("user@gmail.com", "123456");
-    console.log(res);
-};
-
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-};
-
 const RegisterPage = () => {
+    const { message } = App.useApp();
+    const navigate = useNavigate();
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        const { fullName, email, password, phone } = values;
+        const res = await registerAPI(fullName, email, password, phone);
+        if (res.data) {
+            message.success("Registration Successful!");
+            navigate("/login");
+        } else {
+            message.error(res.message);
+        };
+    };
+
+
     return (
         <div className="register-form-wrapper"    >
             <h2 className="register-form-header" >
@@ -33,10 +39,8 @@ const RegisterPage = () => {
                 layout='vertical'
                 style={{ maxWidth: 500, width: "100%" }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
-
                 <Form.Item<FieldType>
                     label="Full name"
                     name="fullName"
