@@ -1,10 +1,8 @@
-import React from 'react';
 import type { FormProps } from 'antd';
 import { Button, Form, Input, App } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import './register.scss'
+import './auth.scss'
 import { registerAPI } from '@/services/api';
-
 
 type FieldType = {
     email: string;
@@ -13,13 +11,14 @@ type FieldType = {
     phone: string;
 };
 
+
 const RegisterPage = () => {
     const { message } = App.useApp();
     const navigate = useNavigate();
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         const { fullName, email, password, phone } = values;
         const res = await registerAPI(fullName, email, password, phone);
-        if (res.data) {
+        if (res?.data) {
             message.success("Registration Successful!");
             navigate("/login");
         } else {
@@ -29,12 +28,11 @@ const RegisterPage = () => {
 
 
     return (
-        <div className="register-form-wrapper"    >
-            <h2 className="register-form-header" >
+        <div className="form-wrapper"    >
+            <h2 className="form-header" >
                 Register Form
             </h2>
             <Form
-
                 name="basic"
                 layout='vertical'
                 style={{ maxWidth: 500, width: "100%" }}
@@ -84,11 +82,11 @@ const RegisterPage = () => {
 
                 <Form.Item label={null} style={{ textAlign: 'center' }}>
                     <Button type="primary" htmlType="submit">
-                        Submit
+                        Register
                     </Button>
                 </Form.Item>
             </Form>
-            <div className="register-redirect">
+            <div className="form-redirect">
                 <span>Already have an account?</span>
                 <Link to="/login"> Login</Link>
             </div>

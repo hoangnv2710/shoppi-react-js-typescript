@@ -11,7 +11,7 @@ interface IResponse<T> {
 const loginAPI = async (username: string, password: string) => {
     const url = "/api/v1/auth/login";
     const response = await axios.post<IResponse<ILogin>>(url, { username, password });
-    return response;
+    return response.data;
 }
 
 
@@ -19,7 +19,7 @@ const registerAPI = async (fullName: string, email: string, password: string, ph
     // console.log(fullName, email, password, phone);
     const url = "/api/v1/user/register";
     const response = await axios.post<IResponse<IRegister>>(url, { fullName, email, password, phone });
-    return response;
+    return response.data;
 }
 
 export { loginAPI, registerAPI }
