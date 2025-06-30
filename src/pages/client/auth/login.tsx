@@ -2,7 +2,9 @@ import type { FormProps } from 'antd';
 import { Button, Form, Input, App } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import './auth.scss'
-import { loginAPI } from '@/services/api';
+import { loginAPI } from 'services/api';
+import { useAuthContext } from 'components/context/auth.context';
+
 
 type FieldType = {
     username: string;
@@ -11,11 +13,14 @@ type FieldType = {
 
 const LoginPage = () => {
     const { message } = App.useApp();
+    const { setIsAuthentication, setUserData } = useAuthContext();
     const navigate = useNavigate();
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         const { username, password } = values;
         const res = await loginAPI(username, password);
         if (res?.data) {
+            setIsAuthentication(true);
+            setUserData(res.data.user);
             localStorage.setItem('access_token', res.data.access_token);
             message.success("Login Successful!");
             navigate("/");
@@ -23,7 +28,6 @@ const LoginPage = () => {
             message.error(res.message);
         };
     };
-
 
     return (
         <div className="form-wrapper"    >

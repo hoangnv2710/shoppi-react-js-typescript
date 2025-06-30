@@ -11,6 +11,7 @@ import HomePage from 'pages/client/home';
 import RegisterPage from 'pages/client/auth/register';
 import LoginPage from 'pages/client/auth/login';
 import { App } from 'antd';
+import { AuthContextProvider } from './components/context/auth.context';
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App>
-      <RouterProvider router={router} />
+      <AuthContextProvider>
+        <RouterProvider router={router} />
+      </AuthContextProvider>
     </App>
   </StrictMode>,
 )
