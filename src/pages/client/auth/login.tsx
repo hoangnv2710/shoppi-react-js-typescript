@@ -33,7 +33,7 @@ const LoginPage = () => {
             <Form
                 name="basic"
                 layout='vertical'
-                style={{ maxWidth: 500, width: "100%" }}
+                style={{ width: "100%" }}
                 onFinish={onFinish}
                 autoComplete="off"
             >
