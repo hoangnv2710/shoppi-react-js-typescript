@@ -8,11 +8,12 @@ import {
 } from "react-router-dom";
 import Layout from '@/layout';
 import HomePage from 'pages/client/home';
-import RegisterPage from 'pages/client/auth/register';
-import LoginPage from 'pages/client/auth/login';
+import RegisterPage from '@/pages/auth/register';
+import LoginPage from '@/pages/auth/login';
 import { App } from 'antd';
 import { AuthContextProvider } from './components/context/auth.context';
 import RequireAuth from './components/auth';
+import ManageUserPage from './pages/admin/manage.users';
 
 const router = createBrowserRouter([
   {
@@ -57,11 +58,9 @@ const router = createBrowserRouter([
         element: <div>admin</div>
       },
       {
-        path: "product",
+        path: "user",
         element: (
-
-          <div>pr</div>
-
+          <ManageUserPage />
         )
         ,
       }

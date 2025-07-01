@@ -9,4 +9,14 @@ interface IRegister {
     fullName: string
 }
 
-export { ILogin, IRegister }
+interface IPageginate<T> {
+    meta: {
+        current: string,
+        pageSize: string,
+        pages: number,
+        total: number
+    },
+    result: T;
+}
+
+export { ILogin, IRegister, IPageginate }

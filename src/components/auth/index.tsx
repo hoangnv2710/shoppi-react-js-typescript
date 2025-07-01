@@ -1,8 +1,5 @@
 import { ReactNode } from "react"
 import { useAuthContext } from "components/context/auth.context";
-import { useLocation } from "react-router-dom";
-
-type TRole = "ADMIN" | "USER";
 
 interface IProps {
     children: ReactNode;
@@ -10,9 +7,7 @@ interface IProps {
 }
 
 const RequireAuth = (props: IProps) => {
-    const location = useLocation();
     const { isAuthentication, userData } = useAuthContext();
-    console.log(location.pathname);
 
     if (!isAuthentication || !userData?.role) {
         return <div>Login to continue!</div>;
