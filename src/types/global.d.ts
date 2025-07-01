@@ -7,6 +7,6 @@ declare global {
         avatar: string;
         fullName: string;
         phone: string;
-        role: string;
+        role: "ADMIN" | "USER";
     }
 }

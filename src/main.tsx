@@ -25,9 +25,9 @@ const router = createBrowserRouter([
         element: <HomePage />
       },
       {
-        path: "/user",
+        path: "user",
         element: (
-          <RequireAuth>
+          <RequireAuth allowedRoles={["USER", "ADMIN"]}>
             <div>user</div>
           </RequireAuth>
         )
@@ -36,21 +36,37 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: "/register",
+    path: "register",
     element: <RegisterPage />,
   },
   {
-    path: "/login",
+    path: "login",
     element: <LoginPage />,
   },
   {
     path: "/admin",
     element: (
-      <RequireAuth>
-        <div>admin</div>
+      <RequireAuth allowedRoles={["ADMIN"]}>
+        <Layout />
       </RequireAuth>
     )
     ,
+    children: [
+      {
+        index: true,
+        element: <div>admin</div>
+      },
+      {
+        path: "product",
+        element: (
+
+          <div>pr</div>
+
+        )
+        ,
+      }
+    ]
+
   }
 ]);
 

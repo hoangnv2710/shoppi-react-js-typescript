@@ -34,11 +34,17 @@ export const AuthContextProvider = (props: TProps) => {
         }
         if (localStorage.getItem("access_token")) fetchAPI();
     }, [])
-    if (isFetching) return (<SyncLoader color={"black"} style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />)
-    return (
-        <AuthContext.Provider value={{ isAuthentication, setIsAuthentication, userData, setUserData, isFetching, setIsFetching }}>
-            {props.children}
-        </AuthContext.Provider>
+
+    return (<>
+        {
+            isFetching === true ?
+                <SyncLoader color={"black"} style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />
+                :
+                <AuthContext.Provider value={{ isAuthentication, setIsAuthentication, userData, setUserData, isFetching, setIsFetching }}>
+                    {props.children}
+                </AuthContext.Provider>
+        }
+    </>
     );
 };
 
