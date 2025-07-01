@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './auth.scss'
 import { loginAPI } from 'services/api';
 import { useAuthContext } from 'components/context/auth.context';
+import { useEffect } from 'react';
 
 
 type FieldType = {
@@ -13,20 +14,25 @@ type FieldType = {
 
 const LoginPage = () => {
     const { message } = App.useApp();
-    const { setIsAuthentication, setUserData } = useAuthContext();
+    const { setIsAuthentication, setUserData, isAuthentication, setIsFetching } = useAuthContext();
     const navigate = useNavigate();
+    useEffect(() => {
+        if (isAuthentication) navigate("/");
+    }, [isAuthentication])
+
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         const { username, password } = values;
+        setIsFetching(true);
         const res = await loginAPI(username, password);
         if (res?.data) {
-            setIsAuthentication(true);
             setUserData(res.data.user);
             localStorage.setItem('access_token', res.data.access_token);
             message.success("Login Successful!");
-            navigate("/");
+            setIsAuthentication(true);
         } else {
             message.error(res.message);
         };
+        setIsFetching(false);
     };
 
     return (

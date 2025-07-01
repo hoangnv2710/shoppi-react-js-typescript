@@ -12,6 +12,7 @@ import RegisterPage from 'pages/client/auth/register';
 import LoginPage from 'pages/client/auth/login';
 import { App } from 'antd';
 import { AuthContextProvider } from './components/context/auth.context';
+import RequireAuth from './components/auth';
 
 const router = createBrowserRouter([
   {
@@ -24,8 +25,13 @@ const router = createBrowserRouter([
         element: <HomePage />
       },
       {
-        path: "/about",
-        element: <div>about!</div>,
+        path: "/user",
+        element: (
+          <RequireAuth>
+            <div>user</div>
+          </RequireAuth>
+        )
+        ,
       }
     ]
   },
@@ -36,6 +42,15 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/admin",
+    element: (
+      <RequireAuth>
+        <div>admin</div>
+      </RequireAuth>
+    )
+    ,
   }
 ]);
 

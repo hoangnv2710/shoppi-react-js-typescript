@@ -10,7 +10,11 @@ interface IResponse<T> {
 
 const loginAPI = async (username: string, password: string) => {
     const url = "/api/v1/auth/login";
-    const response = await axios.post<IResponse<ILogin>>(url, { username, password });
+    const response = await axios.post<IResponse<ILogin>>(url, { username, password }, {
+        headers: {
+            delay: 500,
+        }
+    });
     return response.data;
 }
 
@@ -24,7 +28,11 @@ const registerAPI = async (fullName: string, email: string, password: string, ph
 
 const fetchAccountAPI = async () => {
     const url = "/api/v1/auth/account";
-    const response = await axios.get<IResponse<{ user: IUser }>>(url);
+    const response = await axios.get<IResponse<{ user: IUser }>>(url, {
+        headers: {
+            delay: 500,
+        }
+    });
     return response.data;
 }
 
