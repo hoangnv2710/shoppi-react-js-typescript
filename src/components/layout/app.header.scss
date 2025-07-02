@@ -1,9 +1,11 @@
+@use '../../styles/variables.scss' as *;
+
 .navbar-wrapper {
-    background-color: #fff;
+    background-color: $dark-blue;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
 
     .navbar-container {
         width: 100%;
-        background-color: #fff;
         list-style: none;
         display: flex;
         height: 60px;
@@ -28,18 +30,23 @@
 
             .account-subnav {
                 display: none;
-                // width: 100%;
+                z-index: 100;
                 padding: 0;
                 position: absolute;
                 list-style: none;
                 flex-direction: column;
                 top: 60px;
                 left: 0;
-                background-color: #ccc;
+                background-color: #f0f0f0;
+                box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
 
                 .subnav-item {
-                    width: 100%;
+                    width: 150px;
                     padding: 10px;
+
+                    &:hover {
+                        background-color: $medium-blue;
+                    }
                 }
 
                 .logout-btn {

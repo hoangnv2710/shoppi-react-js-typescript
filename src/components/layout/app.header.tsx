@@ -6,7 +6,7 @@ const Header = () => {
     return (
         <nav className="navbar-wrapper">
             <ul className="navbar-container">
-                <li className="navbar-item logo-icon"><a href="">Logo</a></li>
+                <li className="navbar-item logo-icon"><a href="/">Logo</a></li>
                 <li className="navbar-item search-bar-container"><a href="">Search bar</a></li>
                 <li className="navbar-item account-container"><AccountDetail /></li>
             </ul>
@@ -15,7 +15,7 @@ const Header = () => {
 }
 
 const AccountDetail = () => {
-    const { setUserData, setIsAuthentication } = useAuthContext();
+    const { setUserData, setIsAuthentication, isAuthentication } = useAuthContext();
     const handleLogout = async () => {
         const res = await logoutAPI();
         if (res.data) {
@@ -26,15 +26,19 @@ const AccountDetail = () => {
     }
     return (
         <>
-            <div className="avatar">avatar</div>
-            <div className="user-name">user name</div>
-            <ul className="account-subnav">
-                <li className="subnav-item">Cart</li>
-                <li className="subnav-item">Detail</li>
-                <li className="subnav-item logout-btn" role="button" onClick={handleLogout} >
-                    Log out
-                </li>
-            </ul>
+            {isAuthentication ? <>
+                <div className="avatar">avatar</div>
+                <div className="user-name">user name</div>
+                <ul className="account-subnav">
+                    <li className="subnav-item">Cart</li>
+                    <li className="subnav-item">Detail</li>
+                    <li className="subnav-item logout-btn" role="button" onClick={handleLogout} >
+                        Log out
+                    </li>
+                </ul>
+            </>
+                : <a href="/login">Login</a>
+            }
         </>
     )
 }
