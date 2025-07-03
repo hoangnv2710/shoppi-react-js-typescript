@@ -41,8 +41,14 @@ const logoutAPI = async () => {
     return response.data;
 }
 
-const getUsersAPI = async (current: number, pageSize: number) => {
-    const url = `/api/v1/user?current=${current}&pageSize=${pageSize}`;
+// const getUsersAPI = async (current: number, pageSize: number) => {
+//     const url = `/api/v1/user?current=${current}&pageSize=${pageSize}`;
+//     const response = await axios.get<IResponse<IPageginate<IUserDetail[]>>>(url);
+//     return response.data;
+// }
+
+const getUsersAPI = async (query: string) => {
+    const url = `/api/v1/user?${query}`;
     const response = await axios.get<IResponse<IPageginate<IUserDetail[]>>>(url);
     return response.data;
 }

@@ -13,7 +13,7 @@ import LoginPage from '@/pages/auth/login';
 import { App } from 'antd';
 import { AuthContextProvider } from './components/context/auth.context';
 import RequireAuth from './components/auth';
-import ManageUserPage from './pages/admin/manage.users';
+import ManageUserPage from './pages/admin/m.user';
 
 const router = createBrowserRouter([
   {
