@@ -14,6 +14,7 @@ import { App } from 'antd';
 import { AuthContextProvider } from './components/context/auth.context';
 import RequireAuth from './components/auth';
 import ManageUserPage from './pages/admin/m.user';
+import ManageProductPage from './pages/admin/m.product';
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,13 @@ const router = createBrowserRouter([
         path: "user",
         element: (
           <ManageUserPage />
+        )
+        ,
+      },
+      {
+        path: "product",
+        element: (
+          <ManageProductPage />
         )
         ,
       }

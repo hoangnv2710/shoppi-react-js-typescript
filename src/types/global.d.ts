@@ -26,4 +26,19 @@ declare global {
         updatedAt: date,
         __v: number
     }
+
+    interface IProductDetail {
+        _id: string;
+        createdAt: date,
+        updatedAt: date,
+        __v: number
+        thumbnail: string,
+        slider: string[],
+        mainText: string,
+        author: string,
+        price: number,
+        sold: number,
+        quantity: number,
+        category: string,
+    }
 }

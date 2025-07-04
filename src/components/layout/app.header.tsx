@@ -1,4 +1,4 @@
-import { logoutAPI } from "@/services/api"
+import { logoutAPI } from "@/services/user.service"
 import "./app.header.scss"
 import { useAuthContext } from "../context/auth.context"
 import { Link } from "react-router-dom"

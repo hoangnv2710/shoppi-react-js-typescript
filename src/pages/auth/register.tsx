@@ -2,7 +2,7 @@ import type { FormProps } from 'antd';
 import { Button, Form, Input, App } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import './auth.scss'
-import { registerAPI } from '@/services/api';
+import { registerAPI } from '@/services/user.service';
 
 type FieldType = {
     email: string;

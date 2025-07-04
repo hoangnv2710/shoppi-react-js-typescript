@@ -16,7 +16,7 @@ const SearchBar = () => {
                 onChange={e => setKeyword(e.target.value)}
             />
             <button type="submit" onClick={handleSearch}>
-                <FaSearch />
+                <FaSearch className="search-btn" />
             </button>
         </div>
     )

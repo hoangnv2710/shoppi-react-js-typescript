@@ -2,7 +2,7 @@ import type { FormProps } from 'antd';
 import { Button, Form, Input, App } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import './auth.scss'
-import { loginAPI } from 'services/api';
+import { loginAPI } from '@/services/user.service';
 import { useAuthContext } from 'components/context/auth.context';
 import { useEffect } from 'react';
 

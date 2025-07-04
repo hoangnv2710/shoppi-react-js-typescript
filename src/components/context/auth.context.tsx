@@ -1,4 +1,4 @@
-import { fetchAccountAPI } from "services/api";
+import { fetchAccountAPI } from "@/services/user.service";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
 
@@ -22,18 +22,18 @@ export const AuthContextProvider = (props: TProps) => {
     const [userData, setUserData] = useState<IUser | null>(null);
     const [isFetching, setIsFetching] = useState<boolean>(false);
 
-    // useEffect(() => {
-    //     const fetchAPI = async () => {
-    //         setIsFetching(true);
-    //         const res = await fetchAccountAPI();
-    //         if (res.data) {
-    //             setUserData(res.data.user);
-    //             setIsAuthentication(true);
-    //         }
-    //         setIsFetching(false);
-    //     }
-    //     if (localStorage.getItem("access_token")) fetchAPI();
-    // }, [])
+    useEffect(() => {
+        const fetchAPI = async () => {
+            setIsFetching(true);
+            const res = await fetchAccountAPI();
+            if (res.data) {
+                setUserData(res.data.user);
+                setIsAuthentication(true);
+            }
+            setIsFetching(false);
+        }
+        if (localStorage.getItem("access_token")) fetchAPI();
+    }, [])
 
     return (<>
         {

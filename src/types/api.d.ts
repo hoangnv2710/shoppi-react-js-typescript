@@ -1,3 +1,11 @@
+
+interface IResponse<T> {
+    error?: string | string[];
+    message: string;
+    statusCode: number;
+    data?: T;
+}
+
 interface ILogin {
     access_token: string;
     user: IUser;
@@ -19,4 +27,4 @@ interface IPageginate<T> {
     result: T;
 }
 
-export { ILogin, IRegister, IPageginate }
+export { ILogin, IRegister, IPageginate, IResponse }

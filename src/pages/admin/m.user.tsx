@@ -1,4 +1,4 @@
-import { getUsersAPI } from "@/services/api";
+import { getUsersAPI } from "@/services/user.service";
 import { useEffect, useState } from "react";
 import { Button, Input, Space, Table } from 'antd';
 import type { TableProps } from 'antd';
@@ -94,15 +94,19 @@ const ManageUserPage = () => {
                             />
                         }
                         placeholder="Full name"
+                        onPressEnter={handleSearch}
                     />
                     <Input
                         value={subParams.email}
                         onChange={(e) => setSubParam({ ...subParams, email: e.target.value })}
+                        onPressEnter={handleSearch}
                         placeholder="email" />
                     <Input
                         value={subParams.phone}
                         onChange={(e) => setSubParam({ ...subParams, phone: e.target.value })}
-                        placeholder="phone number" />
+                        placeholder="phone number"
+                        onPressEnter={handleSearch}
+                    />
                 </Space.Compact>
             </Space>
 
