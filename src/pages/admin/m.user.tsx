@@ -54,7 +54,7 @@ const ManageUserPage = () => {
 
     const clearSearch = () => {
         setSubParam({});
-        handleSearch();
+        setParams({ ...params, subParam: undefined });
     }
 
     const onChangePage = (page: number, pageSize: number) => {

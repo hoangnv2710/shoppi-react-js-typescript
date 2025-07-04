@@ -1,13 +1,15 @@
 import { logoutAPI } from "@/services/api"
 import "./app.header.scss"
 import { useAuthContext } from "../context/auth.context"
+import { Link } from "react-router-dom"
+import SearchBar from "../searchbar/searchbar"
 
 const Header = () => {
     return (
         <nav className="navbar-wrapper">
             <ul className="navbar-container">
-                <li className="navbar-item logo-icon"><a href="/">Logo</a></li>
-                <li className="navbar-item search-bar-container"><a href="">Search bar</a></li>
+                <li className="navbar-item logo-icon"><Link to="/" >ShopPi</Link></li>
+                <li className="navbar-item search-bar-container"><SearchBar /></li>
                 <li className="navbar-item account-container"><AccountDetail /></li>
             </ul>
         </nav>
@@ -37,7 +39,7 @@ const AccountDetail = () => {
                     </li>
                 </ul>
             </>
-                : <a href="/login">Login</a>
+                : <Link to="/login" >login</Link>
             }
         </>
     )
