@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Form, FormProps, Input, Modal, Select } from 'antd';
+import { Button, Form, Input, Modal, Select, Upload, UploadFile } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { uploadImage } from '@/services/product.service';
 
-type FieldType = {
-    mainText?: string;
-    price?: number;
-    quantity?: number;
-    category?: string;
-};
 
 const categories: { value: string; label: string }[] = [
     { value: "Arts", label: "Arts" },
@@ -22,29 +18,61 @@ const categories: { value: string; label: string }[] = [
 ]
 
 
-
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-};
-
 const CreateProductModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [form] = Form.useForm<FieldType>();
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        console.log('Success:', values);
-        // form.getFieldValue("mainText" )
-        console.log(form.getFieldsValue())
-    };
+    const [form] = Form.useForm();
+    const [imageList, setImageList] = useState<UploadFile[]>([]);
 
     const showModal = () => {
         setIsModalOpen(true);
     };
 
-    const handleCancel = () => {
+    const uploadImages = async () => {
+        let imgUrls: string[] = [];
+        for (const imgFile of imageList) {
+            if (imgFile.originFileObj) {
+                const formData = new FormData();
+                formData.append('fileImg', imgFile.originFileObj);
+                const res = await uploadImage(formData);
+                if (res.data) imgUrls = [...imgUrls, res.data.fileUploaded];
+            }
+        }
+
+        return imgUrls;
+    }
+
+    const handleSubmit = async () => {
+        console.log(form.getFieldsValue());
+        const imgUrls = await uploadImages();
+        console.log(imgUrls)
+        closeModal();
+    }
+
+    const closeModal = () => {
         form.resetFields();
+        setImageList([]);
         setIsModalOpen(false);
 
     };
+
+    const handleBeforeUpload = (file: File): boolean => {
+        const newFile: UploadFile = {
+            uid: file.uid,
+            name: file.name,
+            status: 'done',
+            url: URL.createObjectURL(file),
+            originFileObj: file,
+        };
+        console.log(newFile);
+        setImageList((prev) => [...prev, newFile]);
+        return false
+    }
+
+    const handleRemove = (file: UploadFile) => {
+        setImageList((prev) => prev.filter((f) => f.uid !== file.uid));
+    };
+
+
 
     return (
         <>
@@ -56,17 +84,14 @@ const CreateProductModal = () => {
                 closable={{ 'aria-label': 'Custom Close Button' }}
                 open={isModalOpen}
                 okText="Create"
-                onCancel={handleCancel}
+                onCancel={closeModal}
                 footer={
                     <>
                         <Button
+                            onClick={handleSubmit}
                             form="myForm"
-                            type="primary" htmlType="submit">
-                            Submit
-                        </Button>
-                        <Button type="default" onClick={handleCancel}>
-                            Cancel
-                        </Button>
+                            type="primary" htmlType="submit">Submit</Button>
+                        <Button type="default" onClick={closeModal}> Cancel</Button>
                     </>
                 }
                 maskClosable={false}
@@ -75,14 +100,9 @@ const CreateProductModal = () => {
                 <Form
                     form={form}
                     id="myForm"
-                    name="basic"
-                    style={{ maxWidth: 600 }}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                    autoComplete="off"
                     layout="vertical"
                 >
-                    <Form.Item<FieldType>
+                    <Form.Item
                         label="Product name"
                         name="mainText"
                         rules={[{ required: true, message: 'Please enter your product name!' }]}
@@ -90,7 +110,7 @@ const CreateProductModal = () => {
                         <Input />
                     </Form.Item>
 
-                    <Form.Item<FieldType>
+                    <Form.Item
                         label="Price"
                         name="price"
                         rules={[{ required: true, message: 'Please enter the price of your product.!' }]}
@@ -98,7 +118,7 @@ const CreateProductModal = () => {
                         <Input />
                     </Form.Item>
 
-                    <Form.Item<FieldType>
+                    <Form.Item
                         label="Quantity"
                         name="quantity"
                         rules={[{ required: true, message: ' Please enter the quantity.!' }]}
@@ -106,14 +126,29 @@ const CreateProductModal = () => {
                         <Input />
                     </Form.Item>
 
-                    <Form.Item<FieldType>
+                    <Form.Item
                         label="Select category"
                         name="category"
                         rules={[{ required: true, message: ' Please select the category.!' }]}
                     >
-
                         <Select options={categories} />
+                    </Form.Item>
 
+                    <Form.Item label="Upload image">
+                        <Upload listType="picture-card"
+                            multiple
+                            fileList={imageList}
+                            beforeUpload={handleBeforeUpload}
+                            onRemove={handleRemove}
+                        >
+                            <button
+                                style={{ color: 'inherit', cursor: 'inherit', border: 0, background: 'none' }}
+                                type="button"
+                            >
+                                <PlusOutlined />
+                                <div style={{ marginTop: 8 }}>Upload</div>
+                            </button>
+                        </Upload>
                     </Form.Item>
                 </Form>
 

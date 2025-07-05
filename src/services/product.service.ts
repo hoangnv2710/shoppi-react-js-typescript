@@ -7,4 +7,17 @@ const getProductsAPI = async (query: string) => {
     return response.data;
 }
 
-export { getProductsAPI }
+const uploadImage = async (formData: FormData) => {
+    const url = '/api/v1/file/upload';
+    const response = await axios.post<IResponse<{ fileUploaded: string }>>(url,
+        formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "upload-type": "book"
+            }
+
+        });
+    return response.data;
+}
+export { getProductsAPI, uploadImage }
