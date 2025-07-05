@@ -3,6 +3,7 @@ import { Button, Input, Space, Table } from 'antd';
 import type { TableProps } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
 import { getProductsAPI } from "@/services/product.service";
+import CreateProductModal from "./create.product";
 
 type TParam = {
     current: number;
@@ -45,6 +46,10 @@ const columns: TableProps<IProductDetail>['columns'] = [
         dataIndex: 'price',
         key: 'price',
         sorter: true,
+        render: (text) => <a>{Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(text)}</a>,
     },
     {
         title: 'Quantity',
@@ -56,6 +61,7 @@ const columns: TableProps<IProductDetail>['columns'] = [
         title: 'Sold',
         dataIndex: 'sold',
         key: 'sold',
+        render: (text) => (text ? (text) : (0)),
         sorter: true,
     },
 
@@ -112,7 +118,6 @@ const ManageProductPage = () => {
     }
     useEffect(() => {
         fetchData();
-        console.log(sorterField)
     }, [params.current, params.pageSize, params.subParam?.category, params.subParam?.mainText, sorterField.field, sorterField.order])
 
     return (
@@ -138,8 +143,9 @@ const ManageProductPage = () => {
                         placeholder="Category" />
                 </Space.Compact>
             </Space>
-
             <Button type="primary" onClick={clearSearch}>Clear</Button>
+
+            <CreateProductModal />
 
             <Table<IProductDetail>
                 columns={columns}
