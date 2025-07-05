@@ -16,14 +16,20 @@ const categories: { value: string; label: string }[] = [
     { value: "Teen", label: "Teen" },
     { value: "Travel", label: "Travel" },
 ]
-
-const CreateProductModal = (props: { reloadData: () => void }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+interface IProps {
+    reloadData: () => void;
+    productData: IProductDetail | undefined;
+    isModalOpen: boolean;
+    setIsModalOpen: (v: boolean) => void;
+}
+const EditProductModal = (props: IProps) => {
+    const { isModalOpen, setIsModalOpen } = props;
     const [form] = Form.useForm();
     const [imageList, setImageList] = useState<UploadFile[]>([]);
 
     const showModal = () => {
         setIsModalOpen(true);
+
     };
 
     const uploadImages = async () => {
@@ -82,9 +88,6 @@ const CreateProductModal = (props: { reloadData: () => void }) => {
 
     return (
         <>
-            <Button type="primary" onClick={showModal}>
-                Create new
-            </Button>
             <Modal
                 title="Create new product"
                 closable={{ 'aria-label': 'Custom Close Button' }}
@@ -113,6 +116,7 @@ const CreateProductModal = (props: { reloadData: () => void }) => {
                         label="Product name"
                         name="mainText"
                         rules={[{ required: true, message: 'Please enter your product name!' }]}
+                        initialValue={props.productData?.mainText}
                     >
                         <Input />
                     </Form.Item>
@@ -164,4 +168,4 @@ const CreateProductModal = (props: { reloadData: () => void }) => {
 
 }
 
-export default CreateProductModal;
+export default EditProductModal;

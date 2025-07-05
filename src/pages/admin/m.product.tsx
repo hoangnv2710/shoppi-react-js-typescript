@@ -4,6 +4,7 @@ import type { TableProps } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
 import { getProductsAPI } from "@/services/product.service";
 import CreateProductModal from "./create.product";
+import EditProductModal from "./edit.product";
 
 type TParam = {
     current: number;
@@ -20,53 +21,6 @@ type TSorter = {
     order?: string;
 }
 
-const columns: TableProps<IProductDetail>['columns'] = [
-    {
-        title: 'Id',
-        dataIndex: '_id',
-        key: 'id',
-        render: (text) => <a>{text}</a>,
-    },
-    {
-        title: 'Category',
-        dataIndex: 'category',
-        key: 'category',
-        sorter: true,
-        render: (text) => <a>{text}</a>,
-    },
-    {
-        title: 'Product name',
-        dataIndex: 'mainText',
-        key: 'name',
-        sorter: true,
-        render: (text) => <a>{text}</a>,
-    },
-    {
-        title: 'Price',
-        dataIndex: 'price',
-        key: 'price',
-        sorter: true,
-        render: (text) => <a>{Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-        }).format(text)}</a>,
-    },
-    {
-        title: 'Quantity',
-        dataIndex: 'quantity',
-        key: 'quantity',
-        sorter: true,
-    },
-    {
-        title: 'Sold',
-        dataIndex: 'sold',
-        key: 'sold',
-        render: (text) => (text ? (text) : (0)),
-        sorter: true,
-    },
-
-];
-
 const ManageProductPage = () => {
     const [data, setData] = useState<IProductDetail[]>([]);
     const [total, setTotal] = useState<number>(0);
@@ -76,6 +30,61 @@ const ManageProductPage = () => {
         pageSize: 5,
     })
     const [sorterField, setSorterField] = useState<TSorter>({});
+    const [productToEdit, setProductToEdit] = useState<IProductDetail>();
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    const columns: TableProps<IProductDetail>['columns'] = [
+        {
+            title: 'Id',
+            dataIndex: '_id',
+            key: 'id',
+            render: (text, record) => <button style={{ cursor: "pointer", background: "transparent", border: "none", color: "blue" }}
+                onClick={() => {
+                    setProductToEdit(record);
+                    setIsEditModalOpen(true);
+                }}
+            >{text}</button>,
+        },
+        {
+            title: 'Category',
+            dataIndex: 'category',
+            key: 'category',
+            sorter: true,
+            render: (text) => (text),
+        },
+        {
+            title: 'Product name',
+            dataIndex: 'mainText',
+            key: 'name',
+            sorter: true,
+            render: (text) => (text),
+        },
+        {
+            title: 'Price',
+            dataIndex: 'price',
+            key: 'price',
+            sorter: true,
+            render: (text) => <div>{
+                Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                }).format(text)}</div>
+        },
+        {
+            title: 'Quantity',
+            dataIndex: 'quantity',
+            key: 'quantity',
+            sorter: true,
+        },
+        {
+            title: 'Sold',
+            dataIndex: 'sold',
+            key: 'sold',
+            render: (text) => (text ? (text) : (0)),
+            sorter: true,
+        },
+
+    ];
 
     const handleSearch = () => {
         setParams({ ...params, current: 1, subParam: subParams });
@@ -146,7 +155,7 @@ const ManageProductPage = () => {
             <Button type="primary" onClick={clearSearch}>Clear</Button>
 
             <CreateProductModal reloadData={fetchData} />
-
+            <EditProductModal reloadData={fetchData} productData={productToEdit} isModalOpen={isEditModalOpen} setIsModalOpen={setIsEditModalOpen} />
             <Table<IProductDetail>
                 columns={columns}
                 dataSource={data} rowKey="_id"
