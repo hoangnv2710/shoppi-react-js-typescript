@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, Modal, Select, Upload, UploadFile } from 'antd';
+import { Button, Form, Input, InputNumber, message, Modal, Select, Upload, UploadFile } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { uploadImage } from '@/services/product.service';
+import { createProduct, uploadImage } from '@/services/product.service';
 
 
 const categories: { value: string; label: string }[] = [
@@ -17,8 +17,7 @@ const categories: { value: string; label: string }[] = [
     { value: "Travel", label: "Travel" },
 ]
 
-
-const CreateProductModal = () => {
+const CreateProductModal = (props: { reloadData: () => void }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const [imageList, setImageList] = useState<UploadFile[]>([]);
@@ -37,15 +36,22 @@ const CreateProductModal = () => {
                 if (res.data) imgUrls = [...imgUrls, res.data.fileUploaded];
             }
         }
-
         return imgUrls;
     }
 
     const handleSubmit = async () => {
-        console.log(form.getFieldsValue());
+        const formData = form.getFieldsValue();
         const imgUrls = await uploadImages();
-        console.log(imgUrls)
-        closeModal();
+        const res = await createProduct(imgUrls[0], imgUrls, formData.mainText, "unknown", formData.price, formData.quantity, formData.category);
+        if (res.data) {
+            message.success("Product created successfully")
+            props.reloadData();
+            closeModal();
+        } else {
+            res.message.forEach(
+                mess => message.error(mess)
+            )
+        }
     }
 
     const closeModal = () => {
@@ -115,7 +121,7 @@ const CreateProductModal = () => {
                         name="price"
                         rules={[{ required: true, message: 'Please enter the price of your product.!' }]}
                     >
-                        <Input />
+                        <InputNumber />
                     </Form.Item>
 
                     <Form.Item
@@ -123,7 +129,7 @@ const CreateProductModal = () => {
                         name="quantity"
                         rules={[{ required: true, message: ' Please enter the quantity.!' }]}
                     >
-                        <Input />
+                        <InputNumber />
                     </Form.Item>
 
                     <Form.Item
@@ -151,7 +157,6 @@ const CreateProductModal = () => {
                         </Upload>
                     </Form.Item>
                 </Form>
-
             </Modal>
         </>
     );

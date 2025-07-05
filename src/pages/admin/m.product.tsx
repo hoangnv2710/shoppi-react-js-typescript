@@ -145,7 +145,7 @@ const ManageProductPage = () => {
             </Space>
             <Button type="primary" onClick={clearSearch}>Clear</Button>
 
-            <CreateProductModal />
+            <CreateProductModal reloadData={fetchData} />
 
             <Table<IProductDetail>
                 columns={columns}

@@ -1,7 +1,7 @@
 
 interface IResponse<T> {
-    error?: string | string[];
-    message: string;
+    error?: string;
+    message: string | string[];
     statusCode: number;
     data?: T;
 }

@@ -20,4 +20,11 @@ const uploadImage = async (formData: FormData) => {
         });
     return response.data;
 }
-export { getProductsAPI, uploadImage }
+
+const createProduct = async (thumbnail: string, slider: string[], mainText: string, author: string, price: number, quantity: number, category: string) => {
+    const url = '/api/v1/book';
+    const response = await axios.post<IResponse<IProductDetail>>(url, { thumbnail, slider, mainText, author, price, quantity, category })
+    return response.data;
+}
+
+export { getProductsAPI, uploadImage, createProduct }
