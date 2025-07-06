@@ -31,7 +31,17 @@ const ManageProductPage = () => {
     })
     const [sorterField, setSorterField] = useState<TSorter>({});
     const [productToEdit, setProductToEdit] = useState<IProductDetail>();
+
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    // useEffect(() => {
+    //     console.log(productToEdit)
+    //     if (prevProduct != productToEdit) {
+    //         setPrevProduct(productToEdit);
+    //         setIsEditModalOpen(true);
+    //     }
+    // }, [productToEdit])
+
 
     const columns: TableProps<IProductDetail>['columns'] = [
         {
@@ -40,7 +50,9 @@ const ManageProductPage = () => {
             key: 'id',
             render: (text, record) => <button style={{ cursor: "pointer", background: "transparent", border: "none", color: "blue" }}
                 onClick={() => {
-                    setProductToEdit(record);
+                    // recordP = record;
+                    setProductToEdit({ ...record });
+                    // console.log(recordP)
                     setIsEditModalOpen(true);
                 }}
             >{text}</button>,
@@ -155,7 +167,7 @@ const ManageProductPage = () => {
             <Button type="primary" onClick={clearSearch}>Clear</Button>
 
             <CreateProductModal reloadData={fetchData} />
-            <EditProductModal reloadData={fetchData} productData={productToEdit} isModalOpen={isEditModalOpen} setIsModalOpen={setIsEditModalOpen} />
+            <EditProductModal reloadData={fetchData} productData={productToEdit} setProductData={setProductToEdit} isModalOpen={isEditModalOpen} setIsModalOpen={setIsEditModalOpen} />
             <Table<IProductDetail>
                 columns={columns}
                 dataSource={data} rowKey="_id"

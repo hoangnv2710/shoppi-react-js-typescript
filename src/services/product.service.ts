@@ -27,4 +27,20 @@ const createProduct = async (thumbnail: string, slider: string[], mainText: stri
     return response.data;
 }
 
-export { getProductsAPI, uploadImage, createProduct }
+const updateProduct = async (id: string, data: IProduct) => {
+    const url = `/api/v1/book/${id}`;
+    const response = await axios.put<IResponse<any>>(url, { ...data })
+    return response.data;
+
+}
+
+
+const deleteProduct = async (id: string) => {
+    const url = `/api/v1/book/${id}`;
+    const response = await axios.delete<IResponse<any>>(url)
+    return response.data;
+
+}
+
+
+export { getProductsAPI, uploadImage, createProduct, updateProduct, deleteProduct }

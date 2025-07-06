@@ -13,6 +13,16 @@ declare global {
         role: TRole;
     }
 
+    interface IProduct {
+        thumbnail: string,
+        slider: string[],
+        mainText: string,
+        author: string,
+        price: number,
+        quantity: number,
+        category: string
+    }
+
     interface IUserDetail {
         _id: string;
         email: string;

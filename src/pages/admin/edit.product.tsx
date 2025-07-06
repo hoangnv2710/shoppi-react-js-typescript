@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, InputNumber, message, Modal, Select, Upload, UploadFile } from 'antd';
+import { Button, Form, Input, InputNumber, message, Modal, Popconfirm, Select, Upload, UploadFile } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { createProduct, uploadImage } from '@/services/product.service';
+import { deleteProduct, updateProduct, uploadImage } from '@/services/product.service';
 
 
 const categories: { value: string; label: string }[] = [
@@ -19,18 +19,36 @@ const categories: { value: string; label: string }[] = [
 interface IProps {
     reloadData: () => void;
     productData: IProductDetail | undefined;
+    setProductData: (v: IProductDetail | undefined) => void;
     isModalOpen: boolean;
     setIsModalOpen: (v: boolean) => void;
 }
 const EditProductModal = (props: IProps) => {
-    const { isModalOpen, setIsModalOpen } = props;
+    const { isModalOpen, setIsModalOpen, setProductData, productData } = props;
     const [form] = Form.useForm();
     const [imageList, setImageList] = useState<UploadFile[]>([]);
 
-    const showModal = () => {
-        setIsModalOpen(true);
+    useEffect(() => {
+        if (productData) {
+            form.setFieldsValue({
+                mainText: productData.mainText,
+                price: productData.price,
+                quantity: productData.quantity,
+                category: productData.category,
+            });
 
-    };
+            const images: UploadFile[] = productData.slider.map((image) =>
+            ({
+                uid: image,
+                name: image,
+                status: "done",
+                url: import.meta.env.VITE_BACKEND_URL + `/images/book/${image}`,
+
+            }))
+            console.log(images)
+            setImageList(images);
+        }
+    }, [productData]);
 
     const uploadImages = async () => {
         console.log(imageList);
@@ -41,17 +59,23 @@ const EditProductModal = (props: IProps) => {
                 formData.append('fileImg', imgFile.originFileObj);
                 const res = await uploadImage(formData);
                 if (res.data) imgUrls = [...imgUrls, res.data.fileUploaded];
+            } else {
+                imgUrls = [...imgUrls, imgFile.name]
             }
         }
+
         return imgUrls;
     }
 
     const handleSubmit = async () => {
         const formData = form.getFieldsValue();
         const imgUrls = await uploadImages();
-        const res = await createProduct(imgUrls[0], imgUrls, formData.mainText, "unknown", formData.price, formData.quantity, formData.category);
+        console.log(imgUrls)
+        console.log(formData)
+        const res = await updateProduct(productData._id, { thumbnail: imgUrls[0], slider: imgUrls, author: "unknown", ...formData })
+        // const res = await createProduct(imgUrls[0], imgUrls, formData.mainText, "unknown", formData.price, formData.quantity, formData.category);
         if (res.data) {
-            message.success("Product created successfully")
+            message.success("Update created successfully")
             props.reloadData();
             closeModal();
         } else {
@@ -61,10 +85,16 @@ const EditProductModal = (props: IProps) => {
         }
     }
 
+    const handleDelete = async () => {
+        const res = await deleteProduct(productData?._id);
+        props.reloadData();
+        closeModal();
+    }
+
     const closeModal = () => {
+        setIsModalOpen(false);
         form.resetFields();
         setImageList([]);
-        setIsModalOpen(false);
     };
 
     const handleBeforeUpload = (file: File): boolean => {
@@ -84,8 +114,6 @@ const EditProductModal = (props: IProps) => {
         setImageList((prev) => prev.filter((f) => f.uid !== file.uid));
     };
 
-
-
     return (
         <>
             <Modal
@@ -97,16 +125,26 @@ const EditProductModal = (props: IProps) => {
                 destroyOnClose
                 footer={
                     <>
+                        <Popconfirm
+                            title="Warning"
+                            description="Are you sure to delete this product?"
+                            onConfirm={handleDelete}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button type="primary" danger> Delete</Button>
+                        </Popconfirm>
+
                         <Button
                             onClick={handleSubmit}
                             form="myForm"
-                            type="primary" htmlType="submit">Submit</Button>
+                            type="primary" htmlType="submit">Update</Button>
                         <Button type="default" onClick={closeModal}> Cancel</Button>
+
                     </>
                 }
                 maskClosable={false}
             >
-
                 <Form
                     form={form}
                     id="myForm"
@@ -116,7 +154,6 @@ const EditProductModal = (props: IProps) => {
                         label="Product name"
                         name="mainText"
                         rules={[{ required: true, message: 'Please enter your product name!' }]}
-                        initialValue={props.productData?.mainText}
                     >
                         <Input />
                     </Form.Item>
